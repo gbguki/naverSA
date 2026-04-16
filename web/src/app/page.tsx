@@ -8,6 +8,7 @@ import {
   fetchDashAdgroups,
   fetchDashCampaigns,
   fetchDashKeywords,
+  fetchMe,
 } from "@/lib/api";
 import BidRecommendationModal from "@/components/BidRecommendationModal";
 
@@ -57,12 +58,27 @@ export default function DashboardPage() {
   const [sortKey, setSortKey] = useState<SortKey>("cost");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [recModal, setRecModal] = useState<{ id: string; name: string; tp: string } | null>(null);
+  const [ready, setReady] = useState(false);
+
+  // 인증 + 활성 자격증명 체크 후에만 대시보드 렌더. 둘 중 하나라도 없으면 해당 페이지로 이동.
+  useEffect(() => {
+    fetchMe()
+      .then((me) => {
+        if (!me.activeCredentialId) {
+          router.replace("/settings/credentials");
+          return;
+        }
+        setReady(true);
+      })
+      .catch(() => { /* fetchMe의 AuthError 핸들러가 /login으로 보냄 */ });
+  }, [router]);
 
   useEffect(() => {
+    if (!ready) return;
     fetchCampaigns().then((cs) => {
       setCampaignsMeta(Object.fromEntries(cs.map((c) => [c.id, c])));
     });
-  }, []);
+  }, [ready]);
 
   // 매체 변경 시 드릴다운 초기화
   useEffect(() => { setStack([{ level: "campaign" }]); }, [mediaParam]);
@@ -75,6 +91,7 @@ export default function DashboardPage() {
   const current = stack[stack.length - 1];
 
   useEffect(() => {
+    if (!ready) return;
     let cancelled = false;
     setLoading(true);
     setError(null);
@@ -89,7 +106,7 @@ export default function DashboardPage() {
       .catch((e) => { if (!cancelled) setError(String(e?.message ?? e)); })
       .finally(() => { if (!cancelled) setLoading(false); });
     return () => { cancelled = true; };
-  }, [current, period]);
+  }, [current, period, ready]);
 
   const filtered = useMemo(() => {
     if (current.level !== "campaign") return rows;
@@ -142,6 +159,14 @@ export default function DashboardPage() {
   }
 
   const mediaLabel = mediaParam === "powerlink" ? "파워링크" : mediaParam === "shopping" ? "쇼핑검색" : "전체";
+
+  if (!ready) {
+    return (
+      <div className="p-8 text-caption" style={{ color: "var(--color-text-subtle)" }}>
+        확인 중...
+      </div>
+    );
+  }
 
   return (
     <div className="p-8">

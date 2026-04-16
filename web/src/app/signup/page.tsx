@@ -33,8 +33,11 @@ export default function SignupPage() {
       <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--color-bg)" }}>
         <div className="card-elevated p-8" style={{ width: 380 }}>
           <h1 className="text-section mb-2">확인 메일을 보냈습니다</h1>
+          <p className="text-caption mb-2" style={{ color: "var(--color-text-muted)" }}>
+            <strong>{email}</strong> 로 확인 링크를 보냈어요.
+          </p>
           <p className="text-caption mb-4" style={{ color: "var(--color-text-muted)" }}>
-            {email} 로 확인 링크를 보냈어요. 메일의 링크를 클릭한 뒤 로그인해주세요.
+            메일의 링크를 클릭한 뒤 로그인해주세요.
           </p>
           <Link href="/login" className="btn btn-primary w-full text-center">로그인으로</Link>
         </div>
