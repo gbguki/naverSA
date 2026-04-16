@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+:root {
+  /* Apple palette */
+  --color-bg: #f5f5f7;
+  --color-surface: #ffffff;
+  --color-surface-alt: #fafafc;
+  --color-border: rgba(0, 0, 0, 0.08);
+  --color-text: #1d1d1f;
+  --color-text-muted: rgba(0, 0, 0, 0.8);
+  --color-text-subtle: rgba(0, 0, 0, 0.48);
+  --color-accent: #0071e3;
+  --color-accent-hover: #0077ed;
+  --color-link: #0066cc;
+  --color-danger: #bf4800;
+  --color-success: #0a7f3f;
+
+  /* Dark surfaces for sidebar glass */
+  --color-glass-bg: rgba(0, 0, 0, 0.8);
+  --color-glass-border: rgba(255, 255, 255, 0.08);
+  --color-glass-text: #ffffff;
+  --color-glass-text-muted: rgba(255, 255, 255, 0.6);
+  --color-glass-hover: rgba(255, 255, 255, 0.08);
+  --color-glass-active: rgba(255, 255, 255, 0.14);
+
+  /* Shadows */
+  --shadow-card: 3px 5px 30px 0px rgba(0, 0, 0, 0.08);
+  --shadow-elevated: 3px 5px 30px 0px rgba(0, 0, 0, 0.22);
+
+  /* Radii */
+  --radius-sm: 5px;
+  --radius-md: 8px;
+  --radius-lg: 11px;
+  --radius-xl: 12px;
+  --radius-pill: 980px;
+
+  --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-text: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+@theme inline {
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-text);
+  --color-surface: var(--color-surface);
+  --color-border-subtle: var(--color-border);
+  --color-accent: var(--color-accent);
+  --font-sans: var(--font-text);
+  --font-display: var(--font-display);
+}
+
+html, body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-text);
+  letter-spacing: -0.224px;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 { font-family: var(--font-display); color: var(--color-text); }
+
+/* Typography helpers */
+.text-display { font-family: var(--font-display); font-size: 40px; font-weight: 600; line-height: 1.10; letter-spacing: -0.28px; }
+.text-section { font-family: var(--font-display); font-size: 28px; font-weight: 600; line-height: 1.14; letter-spacing: 0.196px; }
+.text-tile    { font-family: var(--font-display); font-size: 21px; font-weight: 600; line-height: 1.19; letter-spacing: 0.231px; }
+.text-body    { font-family: var(--font-text); font-size: 17px; font-weight: 400; line-height: 1.47; letter-spacing: -0.374px; }
+.text-body-em { font-family: var(--font-text); font-size: 17px; font-weight: 600; line-height: 1.24; letter-spacing: -0.374px; }
+.text-caption { font-family: var(--font-text); font-size: 14px; font-weight: 400; line-height: 1.29; letter-spacing: -0.224px; }
+.text-micro   { font-family: var(--font-text); font-size: 12px; font-weight: 400; line-height: 1.33; letter-spacing: -0.12px; }
+
+/* Surfaces */
+.surface        { background: var(--color-surface); border-radius: var(--radius-md); }
+.surface-alt    { background: var(--color-surface-alt); border-radius: var(--radius-md); }
+.card-elevated  { background: var(--color-surface); border-radius: var(--radius-md); box-shadow: var(--shadow-card); }
+
+/* Buttons */
+.btn            { font-family: var(--font-text); font-size: 14px; font-weight: 400; padding: 8px 15px; border-radius: var(--radius-md); border: 1px solid transparent; transition: background-color 0.2s, color 0.2s, border-color 0.2s; line-height: 1; }
+.btn-primary    { background: var(--color-accent); color: #ffffff; }
+.btn-primary:hover:not(:disabled) { background: var(--color-accent-hover); }
+.btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-secondary  { background: var(--color-surface); color: var(--color-text); border-color: var(--color-border); }
+.btn-secondary:hover:not(:disabled) { background: var(--color-surface-alt); }
+.btn-ghost      { background: transparent; color: var(--color-text-muted); }
+.btn-ghost:hover:not(:disabled) { background: rgba(0, 0, 0, 0.04); color: var(--color-text); }
+.btn-pill       { border-radius: var(--radius-pill); padding: 6px 14px; font-size: 13px; }
+.btn-danger     { background: transparent; color: var(--color-danger); border-color: var(--color-danger); }
+.btn-danger:hover:not(:disabled) { background: rgba(191, 72, 0, 0.08); }
+
+a { color: var(--color-link); }
+a:hover { text-decoration: underline; }
+
+/* Form */
+.input {
+  font-family: var(--font-text); font-size: 14px; background: var(--color-surface-alt);
+  border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+  padding: 8px 12px; color: var(--color-text); letter-spacing: -0.224px;
+  transition: border-color 0.2s;
+}
+.input:focus { outline: 2px solid var(--color-accent); outline-offset: 1px; border-color: transparent; }
+
+/* Table */
+.data-table { width: 100%; font-size: 13px; border-collapse: separate; border-spacing: 0; }
+.data-table thead th {
+  font-family: var(--font-text); font-size: 12px; font-weight: 600; letter-spacing: -0.12px;
+  color: var(--color-text-muted); text-align: right; padding: 10px 12px; background: var(--color-surface-alt);
+  border-bottom: 1px solid var(--color-border); position: sticky; top: 0;
+}
+.data-table thead th:first-child, .data-table tbody td:first-child, .data-table tfoot td:first-child { text-align: left; }
+.data-table tbody td { padding: 10px 12px; text-align: right; border-bottom: 1px solid var(--color-border); font-variant-numeric: tabular-nums; }
+.data-table tbody tr:last-child td { border-bottom: 0; }
+.data-table tbody tr:hover { background: rgba(0, 113, 227, 0.04); }
+.data-table tfoot td { padding: 10px 12px; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; background: var(--color-surface-alt); border-top: 1px solid var(--color-border); }
+
+.col-emph { background: rgba(0, 113, 227, 0.06); }
+.col-muted { color: var(--color-text-subtle); }
+
+/* Focus */
+*:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; border-radius: var(--radius-sm); }
+
+/* Sidebar nav */
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px; border-radius: var(--radius-md);
+  color: var(--color-glass-text-muted); font-size: 13px; letter-spacing: -0.12px;
+  transition: background-color 0.15s, color 0.15s;
+}
+.nav-item:hover { background: var(--color-glass-hover); color: var(--color-glass-text); text-decoration: none; }
+.nav-item.is-active { background: var(--color-glass-active); color: var(--color-glass-text); }
+.nav-section-title { font-size: 11px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: rgba(255, 255, 255, 0.4); padding: 0 12px 6px; }

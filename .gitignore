@@ -1,0 +1,19 @@
+.env
+.env.local
+.env.*.local
+__pycache__/
+*.pyc
+.venv/
+venv/
+node_modules/
+.next/
+out/
+dist/
+.DS_Store
+.claude/settings.local.json
+
+# 기존 FastAPI 런타임 산출물 (포팅 후 불필요)
+app.db
+*.log
+rules_store.json
+
