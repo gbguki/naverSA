@@ -38,33 +38,45 @@ export default function KeywordRecTable({ adgroupId }: { adgroupId: string }) {
     setResult(`키워드 ${ok}/${res.results.length}건 적용`);
   }
 
-  if (loading) return <div className="px-4 py-3 text-xs text-gray-500">키워드 추천 불러오는 중...</div>;
-  if (rows.length === 0) return <div className="px-4 py-3 text-xs text-gray-500">활성 키워드 없음</div>;
+  if (loading) {
+    return (
+      <div className="text-micro" style={{ padding: "12px 16px", color: "var(--color-text-subtle)" }}>
+        키워드 추천 불러오는 중...
+      </div>
+    );
+  }
+  if (rows.length === 0) {
+    return (
+      <div className="text-micro" style={{ padding: "12px 16px", color: "var(--color-text-subtle)" }}>
+        활성 키워드 없음
+      </div>
+    );
+  }
 
   return (
-    <div className="bg-gray-50 px-4 py-3">
-      <table className="w-full text-xs">
-        <thead className="text-left text-gray-500">
+    <div style={{ background: "var(--color-surface-alt)", padding: "12px 16px" }}>
+      <table className="data-table">
+        <thead>
           <tr>
-            <th className="py-1 w-6"></th>
-            <th className="py-1">키워드</th>
-            <th className="py-1 text-right">현재</th>
-            <th className="py-1 text-right">추천</th>
-            <th className="py-1 text-right">적용값</th>
-            <th className="py-1 text-right">노출</th>
-            <th className="py-1 text-right">클릭</th>
-            <th className="py-1 text-right">CTR</th>
-            <th className="py-1 text-right">순위</th>
-            <th className="py-1 text-right">ROAS</th>
-            <th className="py-1">근거</th>
+            <th style={{ width: 28, textAlign: "center" }}></th>
+            <th style={{ textAlign: "left" }}>키워드</th>
+            <th>현재</th>
+            <th>추천</th>
+            <th>적용값</th>
+            <th>노출</th>
+            <th>클릭</th>
+            <th>CTR</th>
+            <th>순위</th>
+            <th>ROAS</th>
+            <th style={{ textAlign: "left", paddingLeft: 16 }}>근거</th>
           </tr>
         </thead>
         <tbody>
           {rows.map((r, idx) => {
             const noChange = r.recommendedBid === null;
             return (
-              <tr key={r.nccKeywordId} className={`border-t border-gray-200 ${noChange ? "text-gray-400" : ""}`}>
-                <td className="py-1">
+              <tr key={r.nccKeywordId} style={noChange ? { color: "var(--color-text-subtle)" } : undefined}>
+                <td style={{ textAlign: "center" }}>
                   <input
                     type="checkbox"
                     disabled={noChange}
@@ -73,12 +85,13 @@ export default function KeywordRecTable({ adgroupId }: { adgroupId: string }) {
                       const v = e.target.checked;
                       setRows((rs) => rs.map((x, i) => (i === idx ? { ...x, selected: v } : x)));
                     }}
+                    style={{ accentColor: "var(--color-accent)" }}
                   />
                 </td>
-                <td className="py-1">{r.keyword}</td>
-                <td className="py-1 text-right">{r.currentBid.toLocaleString()}</td>
-                <td className="py-1 text-right">{r.recommendedBid?.toLocaleString() ?? "—"}</td>
-                <td className="py-1 text-right">
+                <td style={{ textAlign: "left", fontWeight: 500 }}>{r.keyword}</td>
+                <td>{r.currentBid.toLocaleString()}</td>
+                <td>{r.recommendedBid?.toLocaleString() ?? "—"}</td>
+                <td>
                   <input
                     type="number"
                     step={10}
@@ -89,26 +102,32 @@ export default function KeywordRecTable({ adgroupId }: { adgroupId: string }) {
                       const v = parseInt(e.target.value || "0", 10);
                       setRows((rs) => rs.map((x, i) => (i === idx ? { ...x, editedBid: v } : x)));
                     }}
-                    className="w-20 rounded border px-1 py-0.5 text-right disabled:bg-gray-50"
+                    className="input"
+                    style={{ width: 76, textAlign: "right", padding: "3px 6px" }}
                   />
                 </td>
-                <td className="py-1 text-right">{r.imp30.toLocaleString()}</td>
-                <td className="py-1 text-right">{r.clk30}</td>
-                <td className="py-1 text-right">{r.ctr30.toFixed(1)}%</td>
-                <td className="py-1 text-right">{r.avgRnk30 ? r.avgRnk30.toFixed(1) : "—"}</td>
-                <td className="py-1 text-right">{r.sales30 ? `${r.roas30.toFixed(0)}%` : "—"}</td>
-                <td className="py-1 text-gray-600">{r.reason}</td>
+                <td>{r.imp30.toLocaleString()}</td>
+                <td>{r.clk30.toLocaleString()}</td>
+                <td>{r.ctr30.toFixed(1)}%</td>
+                <td>{r.avgRnk30 ? r.avgRnk30.toFixed(1) : "—"}</td>
+                <td>{r.sales30 ? `${r.roas30.toFixed(0)}%` : "—"}</td>
+                <td style={{ textAlign: "left", paddingLeft: 16, color: "var(--color-text-muted)", maxWidth: 280 }}>
+                  {r.reason}
+                </td>
               </tr>
             );
           })}
         </tbody>
       </table>
-      <div className="mt-2 flex items-center justify-between">
-        <span className="text-xs text-gray-600">{result ?? `선택 ${selected.length}건`}</span>
+      <div className="flex items-center justify-between" style={{ marginTop: 10 }}>
+        <span className="text-micro" style={{ color: "var(--color-text-muted)" }}>
+          {result ?? `선택 ${selected.length}건`}
+        </span>
         <button
           onClick={handleApply}
           disabled={applying || selected.length === 0}
-          className="rounded bg-blue-600 px-3 py-1 text-xs text-white hover:bg-blue-700 disabled:bg-gray-300"
+          className="btn btn-primary btn-pill"
+          style={{ fontSize: 12, padding: "5px 12px" }}
         >
           {applying ? "적용 중..." : `키워드 ${selected.length}건 적용`}
         </button>
