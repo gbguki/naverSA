@@ -1,4 +1,4 @@
-import { supabaseServer, supabaseAdmin } from "@/lib/supabase/server";
+import { supabaseServer } from "@/lib/supabase/server";
 
 export async function POST(req: Request) {
   const { email, password } = await req.json().catch(() => ({}));
@@ -14,19 +14,10 @@ export async function POST(req: Request) {
     return Response.json({ error: `email must be a @${allowed} address` }, { status: 400 });
   }
 
-  // admin으로 생성 (이메일 확인 생략, 조직 내부 도구이므로)
-  const admin = supabaseAdmin();
-  const created = await admin.auth.admin.createUser({
-    email: normalized, password, email_confirm: true,
-  });
-  if (created.error) {
-    return Response.json({ error: created.error.message }, { status: 409 });
-  }
-
-  // 바로 로그인시켜 쿠키 세팅
+  // Supabase에 "Confirm email" ON이면 확인 메일이 발송되고, 링크 클릭 전까지 로그인 불가.
   const sb = await supabaseServer();
-  const { error } = await sb.auth.signInWithPassword({ email: normalized, password });
-  if (error) return Response.json({ error: error.message }, { status: 500 });
+  const { error } = await sb.auth.signUp({ email: normalized, password });
+  if (error) return Response.json({ error: error.message }, { status: 409 });
 
-  return Response.json({ ok: true, email: normalized });
+  return Response.json({ ok: true, email: normalized, needsConfirmation: true });
 }

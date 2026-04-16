@@ -10,6 +10,7 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [err, setErr] = useState<string | null>(null);
+  const [sent, setSent] = useState(false);
   const [busy, setBusy] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -21,10 +22,24 @@ export default function SignupPage() {
     setBusy(true);
     try {
       await signup(email, password);
-      router.push("/settings/credentials");
+      setSent(true);
     } catch (e) {
       setErr(String(e instanceof Error ? e.message : e));
     } finally { setBusy(false); }
+  }
+
+  if (sent) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--color-bg)" }}>
+        <div className="card-elevated p-8" style={{ width: 380 }}>
+          <h1 className="text-section mb-2">확인 메일을 보냈습니다</h1>
+          <p className="text-caption mb-4" style={{ color: "var(--color-text-muted)" }}>
+            {email} 로 확인 링크를 보냈어요. 메일의 링크를 클릭한 뒤 로그인해주세요.
+          </p>
+          <Link href="/login" className="btn btn-primary w-full text-center">로그인으로</Link>
+        </div>
+      </div>
+    );
   }
 
   return (
