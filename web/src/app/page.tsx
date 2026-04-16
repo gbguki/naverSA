@@ -262,6 +262,7 @@ export default function DashboardPage() {
                 <Th onClick={() => toggleSort("purchaseCvr")} active={sortKey === "purchaseCvr"} dir={sortDir} emph>구매 CVR</Th>
                 <Th onClick={() => toggleSort("purchaseAmt")} active={sortKey === "purchaseAmt"} dir={sortDir} emph>구매 매출</Th>
                 <Th onClick={() => toggleSort("purchaseRoas")} active={sortKey === "purchaseRoas"} dir={sortDir} emph>구매 ROAS</Th>
+                <th className="col-emph" style={{ textAlign: "right" }}>구매 CPA</th>
                 <Th onClick={() => toggleSort("totalConvCnt")} active={sortKey === "totalConvCnt"} dir={sortDir} muted>총 전환</Th>
                 <Th onClick={() => toggleSort("totalConvAmt")} active={sortKey === "totalConvAmt"} dir={sortDir} muted>총 매출</Th>
                 <Th onClick={() => toggleSort("totalRoas")} active={sortKey === "totalRoas"} dir={sortDir} muted>총 ROAS</Th>
@@ -269,9 +270,9 @@ export default function DashboardPage() {
               </tr>
             </thead>
             <tbody>
-              {loading && <tr><td colSpan={14} style={{ textAlign: "center", padding: "32px 12px", color: "var(--color-text-subtle)" }}>불러오는 중...</td></tr>}
-              {!loading && error && <tr><td colSpan={14} style={{ textAlign: "center", padding: "32px 12px", color: "var(--color-danger)" }}>오류: {error}</td></tr>}
-              {!loading && !error && sorted.length === 0 && <tr><td colSpan={14} style={{ textAlign: "center", padding: "32px 12px", color: "var(--color-text-subtle)" }}>데이터 없음</td></tr>}
+              {loading && <tr><td colSpan={15} style={{ textAlign: "center", padding: "32px 12px", color: "var(--color-text-subtle)" }}>불러오는 중...</td></tr>}
+              {!loading && error && <tr><td colSpan={15} style={{ textAlign: "center", padding: "32px 12px", color: "var(--color-danger)" }}>오류: {error}</td></tr>}
+              {!loading && !error && sorted.length === 0 && <tr><td colSpan={15} style={{ textAlign: "center", padding: "32px 12px", color: "var(--color-text-subtle)" }}>데이터 없음</td></tr>}
               {!loading && !error && sorted.map((r) => (
                 <tr key={r.id}>
                   <td>
@@ -292,6 +293,7 @@ export default function DashboardPage() {
                   <td className="col-emph">{r.purchaseCvr.toFixed(2)}%</td>
                   <td className="col-emph">{r.purchaseAmt.toLocaleString()}원</td>
                   <td className="col-emph" style={{ fontWeight: 600 }}>{r.purchaseRoas.toFixed(2)}%</td>
+                  <td className="col-emph">{r.purchaseCnt ? Math.round(r.cost / r.purchaseCnt).toLocaleString() : "—"}원</td>
                   <td className="col-muted">{r.totalConvCnt.toLocaleString()}</td>
                   <td className="col-muted">{r.totalConvAmt.toLocaleString()}원</td>
                   <td className="col-muted">{r.totalRoas.toFixed(2)}%</td>
@@ -318,6 +320,7 @@ export default function DashboardPage() {
                   <td className="col-emph">{totals.clkCnt ? (totals.purchaseCnt / totals.clkCnt * 100).toFixed(2) : "0.00"}%</td>
                   <td className="col-emph">{totals.purchaseAmt.toLocaleString()}원</td>
                   <td className="col-emph">{totals.cost ? (totals.purchaseAmt / totals.cost * 100).toFixed(2) : "0.00"}%</td>
+                  <td className="col-emph">{totals.purchaseCnt ? Math.round(totals.cost / totals.purchaseCnt).toLocaleString() : "—"}원</td>
                   <td className="col-muted">{totals.totalConvCnt.toLocaleString()}</td>
                   <td className="col-muted">{totals.totalConvAmt.toLocaleString()}원</td>
                   <td className="col-muted">{totals.cost ? (totals.totalConvAmt / totals.cost * 100).toFixed(2) : "0.00"}%</td>
